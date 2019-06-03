@@ -1,28 +1,29 @@
 ---
-- hosts: localhost 
-  sudo: yes
+- hosts: localhost
+  become: yes
   tasks:
-  - name: Upgrade all packages to the latest version
-    apt:  
-      name: "*"
-      state: latest
-      force_apt_get: True
-
-  - name: Install the package "apt-transport-https"
-    apt: 
-      name: apt-transport-https 
-      update_cache: yes
+  - name: Install a list packages
+    apt:
+      name: "{{ packages }}"
+    vars:
+      packages:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg2
+      - software-properties-common
 
   - name: download
-    shell: 'curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list'
- 
+    shell: 'curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -'
+
+  - name: add repository
+    shell: 'add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian \$(lsb_release -cs) \stable"'
+  
   - name: Upgrade all packages to the latest version
     apt:
       name: "*"
       state: latest
-      force_apt_get: True
 
-  - name: install kubectl
-    apt:
-      name: kubectl
-      update_cache: yes
+  - name: install docker
+    apt: 
+      name: 'docker-ce=18.06.3~ce~3-0~debian'
