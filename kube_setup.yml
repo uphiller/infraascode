@@ -17,7 +17,7 @@
     shell: 'curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -'
 
   - name: add repository
-    shell: 'add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian \$(lsb_release -cs) \stable"'
+    shell: 'add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"'
   
   - name: Upgrade all packages to the latest version
     apt:
