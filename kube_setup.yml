@@ -25,3 +25,6 @@
   - name: install docker
     apt: 
       name: 'docker-ce=18.06.3~ce~3-0~debian'
+
+  - name: permission to current user
+    shell: 'sudo usermod -aG docker $USER'
