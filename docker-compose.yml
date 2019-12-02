@@ -1,0 +1,38 @@
+version: '3.3'
+services:
+  buoy-api:
+    image: registry.gitlab.com/nomadlab1/buoy:latest
+    environment:
+      - NODE_ENV=prod
+    ports:
+      - 8080:8080
+    networks:
+      - nomadlab
+    container_name: buoy-api
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=201912
+      - TZ=Asia/Seoul
+    container_name: mysql
+    ports:
+      - 3306:3306
+    networks:
+      - nomadlab
+  weavescope:
+    image: weaveworks/scope:1.9.0
+    networks:
+      - nomadlab
+    pid: "host"
+    privileged: true
+    labels:
+      - "works.weave.role=system"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:rw"
+    command:
+      - "--probe.docker=true"
+    ports:
+      - 4040:4040
+    container_name: weavescope
+networks:
+  nomadlab:
